@@ -128,7 +128,22 @@ Terminal biru **Vin+ / −**, dilewatkan ke saklar ON/OFF.
 
 ---
 
-## 4. Wiring ke Arduino Mega 2560
+## 4 Test channel1 tanpa microcontroller
+
+![tb6612_channel_a_jumper_test](./assets/tb6612_channel_a_jumper_test.png)
+
+Urutannya biar aman:
+
+1. Pasang 3 jumper merah dulu dalam keadaan **saklar OFF**.
+2. Colok motor ke konektor Motor A. Pin encoder (E1A, E1B, 5V) nggak usah dipikirin, ikut saja di konektornya.
+3. Sambung power supply ke Vin, lalu saklar **ON**. Motor harus muter full speed, dan LED1 menyala.
+4. Untuk tes arah balik, matikan dulu, pindahkan jumper dari **AIN1 ke AIN2**, lalu nyalakan lagi.
+
+Kalau motor diam padahal LED nyala, cek berurutan: STBY sudah benar ke 3V3, pin 3V3 di header atas benar-benar keluar sekitar 3.3 V (ukur pakai multimeter), lalu tegangan di AO1–AO2 saat ON harus mendekati Vin.
+
+
+
+## 5. Wiring ke Arduino Mega 2560
 
 | D24A       | Mega          | Keterangan |
 |------------|---------------|------------|
@@ -156,7 +171,7 @@ Catatan:
 
 ---
 
-## 5. Sketch: `D24A_Mega_Test.ino`
+## 6. Sketch: `D24A_Mega_Test.ino`
 
 ### Fungsi utama
 
@@ -207,7 +222,7 @@ MA: 1520 (64)  MB: 1498 (62)  MC: 1533 (65)  MD: 1510 (63)  Vbat=11.84V
 
 ---
 
-## 6. Versi ESP32: `D24A_ESP32_Test.ino`
+## 7. Versi ESP32: `D24A_ESP32_Test.ino`
 
 > [!WARNING]
 > **Checklist wajib sebelum menyambungkan D24A ke ESP32:**
@@ -222,7 +237,7 @@ MA: 1520 (64)  MB: 1498 (62)  MC: 1533 (65)  MD: 1510 (63)  Vbat=11.84V
 >
 > Kalau salah satu belum dicentang, **jangan nyalakan dulu**.
 
-### 6.1 Kebutuhan pin
+### 7.1 Kebutuhan pin
 
 | Fungsi | Jumlah |
 |--------|--------|
@@ -240,7 +255,7 @@ ESP32 klasik punya sekitar 21 GPIO yang aman, ditambah beberapa pin strapping. J
 
 Kalau tersedia **ESP32-S3**, itu alternatif yang lebih lega. GPIO-nya lebih banyak sehingga I2C tetap bisa dipakai, dan PCNT-nya 4 unit, pas untuk 4 encoder.
 
-### 6.2 Wiring ke ESP32 DevKit
+### 7.2 Wiring ke ESP32 DevKit
 
 | D24A | GPIO | Catatan |
 |------|------|---------|
@@ -264,7 +279,7 @@ Pin yang sengaja dihindari:
 - **GPIO1/3**: UART0 (Serial / upload).
 - **GPIO6–11**: terhubung ke flash internal.
 
-### 6.3 ⚠️ Level tegangan encoder
+### 7.3 ⚠️ Level tegangan encoder
 
 > [!CAUTION]
 > GPIO ESP32 **tidak toleran 5V**. Menyambungkan sinyal 5V langsung ke GPIO bisa merusak ESP32 secara permanen. Pin input-only (GPIO34–39) juga **tidak** lebih kebal; semuanya sama-sama 3.3V.
@@ -297,7 +312,7 @@ Jalur lain **aman tanpa level shifter**:
 - PWM / IN / STBY: arahnya dari ESP32 (3.3V) ke TB6612, dan 3.3V sudah valid HIGH.
 - ADC: 12V / 11 ≈ 1.1V, masih dalam rentang ADC.
 
-### 6.4 Perbedaan dengan versi Mega
+### 7.4 Perbedaan dengan versi Mega
 
 | Aspek | Mega | ESP32 |
 |-------|------|-------|
@@ -320,7 +335,7 @@ Fungsi API sketch sama dengan versi Mega: `setMotor()`, `brakeMotor()`, `setAll(
 
 ---
 
-## 7. Langkah Uji Pertama
+## 8. Langkah Uji Pertama
 
 1. Angkat robot sampai **roda tidak menyentuh lantai**.
 2. Sambungkan baterai ke Vin, saklar masih **OFF**.
@@ -335,7 +350,7 @@ Fungsi API sketch sama dengan versi Mega: `setMotor()`, `brakeMotor()`, `setAll(
 
 ---
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 | Gejala | Kemungkinan penyebab |
 |--------|----------------------|
@@ -353,7 +368,7 @@ Fungsi API sketch sama dengan versi Mega: `setMotor()`, `brakeMotor()`, `setAll(
 
 ---
 
-## 9. Pengembangan Lanjut
+## 10. Pengembangan Lanjut
 
 - Kontrol kecepatan closed-loop (PID per roda) memakai delta encoder per periode
 - Kinematika mecanum / differential drive
